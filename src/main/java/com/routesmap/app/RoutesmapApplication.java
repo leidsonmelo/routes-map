@@ -9,4 +9,5 @@ public class RoutesmapApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RoutesmapApplication.class, args);
 	}
+
 }
