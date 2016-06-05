@@ -2,15 +2,14 @@ package com.routesmap.app.model.entity;
 
 import org.springframework.data.annotation.Id;
 
-public class Stop {
+public class Position {
 
     @Id
     private String id;
 
-    private Position position;
+    private Double lat;
+    private Double lng;
 
-    private Integer vehicleId;
-
-    public Stop() {}
+    public Position() {}
 
 }
