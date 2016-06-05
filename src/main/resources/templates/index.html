@@ -1,29 +1,94 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR" ng-app="RoutemapApp">
 
 	<head th:fragment="head">
 		<meta charset="UTF-8"></meta>
     	<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+		
+		<link th:href="@{/webjars/bootstrap/3.3.1/css/bootstrap.min.css}" href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.css" rel="stylesheet" media="screen"></link>
 
 		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 
 		<style>
-			#mapid { height: 600px; }
+			#vehicleList {width: 19%; float: left; margin: 0.5%;}
+			#mapid { height: 600px; width: 80%;}
 		</style>
 
 		<title>Routemap App</title>
 	</head>
 
 	<body>
+		<div ng-controller="VehicleController">
+			<div class="panel panel-default" id="vehicleList">
+				<div class="panel-heading">
+			    	<h3 class="panel-title">
+			    		Veículos
+
+						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#addVehicleModal">
+						  <i class="glyphicon glyphicon-plus"></i>
+						</button>
+			    	</h3>
+			  	</div>
+			  	<div class="panel-body">
+					<!-- Table -->
+				  	<table class="table">
+				    	<tbody ng-show="vehicles.length > 0">
+				    		<tr ng-repeat="vehicle in vehicles">
+						  		<td>{{vehicle.name}}</td>
+							  	<td style="width: 50px;">
+							  		<a class="btn btn-danger" href="#" role="button" ng-click="delete(vehicle)">
+							  			<i class="glyphicon glyphicon-trash"></i>
+							  		</a>
+							  	</td>
+							</tr>
+				    	</tbody>
+				    	<tbody ng-show="vehicles.length == 0">
+				    		<tr>
+				    			<td>Nenhum veículo cadastrado.</td>
+				    		</tr>
+				    	</tbody>
+				  	</table>
+			  	</div>
+			</div>
+
+			<div class="modal fade" tabindex="-1" role="dialog" id="addVehicleModal">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">Adicionar Veículo</h4>
+			      </div>
+			      <div class="modal-body">
+					<form>
+					  <div class="form-group">
+					    <label for="vehicle.name">Nome</label>
+					    <input type="text" class="form-control" name="vehicle.name" ng-model="vehicle.name" placeholder="Nome do veículo"></input>
+					  </div>
+					</form>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+			        <button type="button" class="btn btn-success" ng-click="save(vehicle)">Salvar</button>
+			      </div>
+			    </div><!-- /.modal-content -->
+			  </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+		</div>
 
 	 	<div id="mapid"></div>
+
 
 		<script th:src="@{/webjars/jquery/1.11.3/jquery.min.js}" src="http://cdn.jsdelivr.net/webjars/jquery/1.11.3/jquery.min.js"></script>
 
 		<script th:src="@{/webjars/angularjs/1.3.8/angular.min.js}" src="http://cdn.jsdelivr.net/webjars/angularjs/1.3.8/angular.min.js"></script>
 		<script th:src="@{/webjars/angularjs/1.3.8/angular-route.min.js}" src="http://cdn.jsdelivr.net/webjars/angularjs/1.3.8/angular-route.min.js"></script>
 		<script th:src="@{/webjars/angularjs/1.3.8/angular-resource.min.js}" src="http://cdn.jsdelivr.net/webjars/angularjs/1.3.8/angular-resource.min.js"></script>
+
+		<script th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}" src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
 		<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+		<script src="js/app.js"></script>
 
 		<script type="text/javascript">
 			var map = L.map('mapid').setView([-3.75, -38.53], 13);

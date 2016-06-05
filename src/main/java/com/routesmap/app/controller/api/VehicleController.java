@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.routesmap.app.model.entity.Vehicle;
 import com.routesmap.app.service.VehicleService;
 
-@RestController(value = "/vehicle")
+@RestController
+@RequestMapping(value = "/vehicle")
 public class VehicleController {
 
 	@Autowired private VehicleService vehicleService;
@@ -22,7 +24,7 @@ public class VehicleController {
 	}
 	
 	@RequestMapping(value = "/save", method=RequestMethod.POST)
-	public void save(Vehicle vehicle){
+	public void save(@RequestBody Vehicle vehicle){
 		vehicleService.save(vehicle);
 	}
 	
