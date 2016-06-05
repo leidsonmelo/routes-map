@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+
+	<head th:fragment="head">
+		<meta charset="UTF-8"></meta>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+
+		<style>
+			#mapid { height: 600px; }
+		</style>
+
+		<title>Routemap App</title>
+	</head>
+
+	<body>
+
+	 	<div id="mapid"></div>
+
+		<script th:src="@{/webjars/jquery/1.11.3/jquery.min.js}" src="http://cdn.jsdelivr.net/webjars/jquery/1.11.3/jquery.min.js"></script>
+
+		<script th:src="@{/webjars/angularjs/1.3.8/angular.min.js}" src="http://cdn.jsdelivr.net/webjars/angularjs/1.3.8/angular.min.js"></script>
+		<script th:src="@{/webjars/angularjs/1.3.8/angular-route.min.js}" src="http://cdn.jsdelivr.net/webjars/angularjs/1.3.8/angular-route.min.js"></script>
+		<script th:src="@{/webjars/angularjs/1.3.8/angular-resource.min.js}" src="http://cdn.jsdelivr.net/webjars/angularjs/1.3.8/angular-resource.min.js"></script>
+		<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+		<script type="text/javascript">
+			var map = L.map('mapid').setView([-3.75, -38.53], 13);
+
+			L.tileLayer(
+		    	'https://api.mapbox.com/styles/v1/mapbox/emerald-v8/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+		        tileSize: 512,
+		        zoomOffset: -1,
+			    accessToken: 'pk.eyJ1IjoibGVpZHNvbm1lbG8iLCJhIjoiY2lwMnB1cXhwMDBnenRzbTB1ZXlkZ3R3dyJ9.jgUFPdP-vRqRVoe92p1RAQ',
+		        attribution: '© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		    }).addTo(map);
+			
+			map.on('click', function(e){
+				L.marker().setLatLng(e.latlng).bindPopup('<b>Hello world!</b> I am a popup.').addTo(map);
+			});
+			
+		</script>
+
+	</body>
+</html>
