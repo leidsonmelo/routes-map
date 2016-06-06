@@ -30,9 +30,12 @@
 				O veículo <strong>{{selectedVehicle.name}}</strong> está selecionado. Você já pode montar a rota.
 			</div>
 			<div class="alert alert-success" ng-show="markers.length > 0">
-				<strong>{{markers.length}}</strong> ponto(s) selecionado(s).
-				<a class="btn btn-default button-alert" href="#" role="button" ng-click="criarRota()" ng-show="markers.length > 1">
-		  			Criar Rota
+				<strong>{{markers.length}}</strong> <i class="glyphicon glyphicon-map-marker"></i> ponto(s) selecionado(s).
+				<a class="btn btn-default button-alert" href="#" role="button" ng-click="createRoute()" ng-show="markers.length > 1">
+		  			<i class="glyphicon glyphicon-road"></i>
+		  		</a>
+				<a class="btn btn-default button-alert" href="#" role="button" ng-click="resetRoute()" >
+		  			<i class="glyphicon glyphicon-repeat"></i>
 		  		</a>
 			</div>
 		</div>

@@ -1,20 +1,3 @@
-/*var map = L.map('mapid').setView([-3.75, -38.53], 13);
-
-L.tileLayer(
-	'https://api.mapbox.com/styles/v1/mapbox/emerald-v8/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'pk.eyJ1IjoibGVpZHNvbm1lbG8iLCJhIjoiY2lwMnB1cXhwMDBnenRzbTB1ZXlkZ3R3dyJ9.jgUFPdP-vRqRVoe92p1RAQ',
-    attribution: '© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
-
-map.on('click', function(e){
-	L.marker().setLatLng(e.latlng)
-	.on('click', function(){
-		map.removeLayer(this);
-	})
-	.addTo(map);
-});*/
 
 routemapApp.controller('RoutemapController', ['$scope', '$rootScope', function($scope, $rootScope) {
 
@@ -34,6 +17,12 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', function($
         markers: []
     });
 
+    $rootScope.$watch('selectedVehicle', function(newVehicle, oldVehicle){
+    	if(!newVehicle || newVehicle.id !== oldVehicle.id){
+			$scope.resetRoute();
+    	}
+    });
+
     $scope.$on('leafletDirectiveMap.map.click', function(event, args){
     	if($rootScope.selectedVehicle && $rootScope.selectedVehicle.id){
 	    	var icon = generateIcon(args.leafletEvent);
@@ -46,6 +35,14 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', function($
     $scope.$on('leafletDirectiveMarker.map.click', function(event, args){
     	removeIcon(args.leafletEvent.latlng);
     });
+
+    $scope.createRoute = function(){
+
+    };
+
+    $scope.resetRoute = function(){
+		$scope.markers = [];
+    };
 
     function generateIcon(event){
     	return {
