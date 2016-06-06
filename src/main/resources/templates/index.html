@@ -13,6 +13,7 @@
 			#vehicleList {width: 24%; float: left; margin: auto 0.5%;}
 			#content {width: 100%;}
 			#mapid { height: 600px; width: 75%;}
+			.button-alert {margin: -8px auto; float: right;}
 		</style>
 
 		<title>Routemap App</title>
@@ -25,8 +26,14 @@
 			</div>
 		</div>
 		<div id="content" ng-show="selectedVehicle.id">
-			<div class="alert alert-success">
+			<div class="alert alert-success" ng-show="markers.length === 0">
 				O veículo <strong>{{selectedVehicle.name}}</strong> está selecionado. Você já pode montar a rota.
+			</div>
+			<div class="alert alert-success" ng-show="markers.length > 0">
+				<strong>{{markers.length}}</strong> ponto(s) selecionado(s).
+				<a class="btn btn-default button-alert" href="#" role="button" ng-click="criarRota()" ng-show="markers.length > 1">
+		  			Criar Rota
+		  		</a>
 			</div>
 		</div>
 
@@ -96,7 +103,8 @@
 		</div>
 	 	
 	 	<!--<div id="mapid"></div>-->
-    	<leaflet id="map" lf-center="london" markers="markers" width="75%" height="600px"></leaflet>
+    	<leaflet id="map" lf-center="fortaleza" markers="markers" width="75%" height="600px"></leaflet>
+    	<div class="worldmap box">Map center: Teste</div>
 
 		<script th:src="@{/webjars/jquery/1.11.3/jquery.min.js}" src="http://cdn.jsdelivr.net/webjars/jquery/1.11.3/jquery.min.js"></script>
 
@@ -107,7 +115,6 @@
 		<script th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}" src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 		<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-
 		<script src="lib/angular-leaflet-directive.min.js"></script>
 
 		<script src="js/app.js"></script>

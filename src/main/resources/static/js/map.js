@@ -16,10 +16,10 @@ map.on('click', function(e){
 	.addTo(map);
 });*/
 
-routemapApp.controller('RoutemapController', ['$scope', function($scope) {
+routemapApp.controller('RoutemapController', ['$scope', '$rootScope', function($scope, $rootScope) {
 
 	angular.extend($scope, {
-        london: {
+        fortaleza: {
             lat: -3.75,
             lng: -38.53,
             zoom: 13
@@ -34,18 +34,41 @@ routemapApp.controller('RoutemapController', ['$scope', function($scope) {
         markers: []
     });
 
-    $scope.$on('leafletDirectiveMap.map.click', function(event, teste){
-        $scope.markers.push({
-        	lat: teste.leafletEvent.latlng.lat,
-            lng: teste.leafletEvent.latlng.lng,
-            click: function(){
-            	alert('teste');
-            }
-        });
+    $scope.$on('leafletDirectiveMap.map.click', function(event, args){
+    	if($rootScope.selectedVehicle && $rootScope.selectedVehicle.id){
+	    	var icon = generateIcon(args.leafletEvent);
+	        $scope.markers.push(icon);
+    	}else{
+    		alert('É necessário selecionar um veículos antes de criar a rota');
+    	}
     });
 
-    $scope.$on('leafletDirectiveMarker.map.click', function(event, teste){
-        $scope.markers.splice(teste.leafletObject);
+    $scope.$on('leafletDirectiveMarker.map.click', function(event, args){
+    	removeIcon(args.leafletEvent.latlng);
     });
+
+    function generateIcon(event){
+    	return {
+        	lat: event.latlng.lat,
+            lng: event.latlng.lng
+        };
+    }
+
+    function removeIcon(latlng){
+    	var position = findPositionIcon(latlng.lat, latlng.lng);
+    	if(position >= 0){
+    		$scope.markers.splice(position, 1);
+    	}
+    }
+
+    function findPositionIcon(lat, lng){
+    	var position;
+    	for(x = 0; x < $scope.markers.length; x ++){
+    		if($scope.markers[x].lat === lat && $scope.markers[x].lng === lng){
+    			position = x;
+    		}
+    	}
+    	return position;
+    }
 
 }]);
