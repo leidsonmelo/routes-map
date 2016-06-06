@@ -10,14 +10,26 @@
 		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 
 		<style>
-			#vehicleList {width: 19%; float: left; margin: 0.5%;}
-			#mapid { height: 600px; width: 80%;}
+			#vehicleList {width: 24%; float: left; margin: auto 0.5%;}
+			#content {width: 100%;}
+			#mapid { height: 600px; width: 75%;}
 		</style>
 
 		<title>Routemap App</title>
 	</head>
 
-	<body>
+	<body ng-controller="RoutemapController">
+		<div id="content" ng-show="!selectedVehicle.id">
+			<div class="alert alert-warning">
+				<strong>Atenção:</strong> Nenhum veículo foi selecionado para montar a rota. Selecione através do botão: <i class="glyphicon glyphicon-ok"></i>
+			</div>
+		</div>
+		<div id="content" ng-show="selectedVehicle.id">
+			<div class="alert alert-success">
+				O veículo <strong>{{selectedVehicle.name}}</strong> está selecionado. Você já pode montar a rota.
+			</div>
+		</div>
+
 		<div ng-controller="VehicleController">
 			<div class="panel panel-default" id="vehicleList">
 				<div class="panel-heading">
@@ -35,9 +47,17 @@
 				    	<tbody ng-show="vehicles.length > 0">
 				    		<tr ng-repeat="vehicle in vehicles">
 						  		<td>{{vehicle.name}}</td>
-							  	<td style="width: 50px;">
+							  	<td style="width: 100px;" ng-show="vehicle.id != selectedVehicle.id">
+							  		<a class="btn btn-default" href="#" role="button" ng-click="selectVehicle(vehicle)">
+							  			<i class="glyphicon glyphicon-ok"></i>
+							  		</a>
 							  		<a class="btn btn-danger" href="#" role="button" ng-click="delete(vehicle)">
 							  			<i class="glyphicon glyphicon-trash"></i>
+							  		</a>
+							  	</td>
+							  	<td style="width: 100px;" ng-show="vehicle.id == selectedVehicle.id">
+							  		<a class="btn btn-default" href="#" role="button" ng-click="deselectVehicle()">
+							  			<i class="glyphicon glyphicon-remove"></i>
 							  		</a>
 							  	</td>
 							</tr>
@@ -74,9 +94,9 @@
 			  </div><!-- /.modal-dialog -->
 			</div><!-- /.modal -->
 		</div>
-
-	 	<div id="mapid"></div>
-
+	 	
+	 	<!--<div id="mapid"></div>-->
+    	<leaflet id="map" lf-center="london" markers="markers" width="75%" height="600px"></leaflet>
 
 		<script th:src="@{/webjars/jquery/1.11.3/jquery.min.js}" src="http://cdn.jsdelivr.net/webjars/jquery/1.11.3/jquery.min.js"></script>
 
@@ -88,24 +108,11 @@
 
 		<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 
+		<script src="lib/angular-leaflet-directive.min.js"></script>
+
 		<script src="js/app.js"></script>
-
-		<script type="text/javascript">
-			var map = L.map('mapid').setView([-3.75, -38.53], 13);
-
-			L.tileLayer(
-		    	'https://api.mapbox.com/styles/v1/mapbox/emerald-v8/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-		        tileSize: 512,
-		        zoomOffset: -1,
-			    accessToken: 'pk.eyJ1IjoibGVpZHNvbm1lbG8iLCJhIjoiY2lwMnB1cXhwMDBnenRzbTB1ZXlkZ3R3dyJ9.jgUFPdP-vRqRVoe92p1RAQ',
-		        attribution: '© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-		    }).addTo(map);
+		<script src="js/vehicle.js"></script>
+		<script src="js/map.js"></script>
 			
-			map.on('click', function(e){
-				L.marker().setLatLng(e.latlng).bindPopup('<b>Hello world!</b> I am a popup.').addTo(map);
-			});
-			
-		</script>
-
 	</body>
 </html>
