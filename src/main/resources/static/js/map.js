@@ -1,5 +1,5 @@
 
-routemapApp.controller('RoutemapController', ['$scope', '$rootScope', function($scope, $rootScope) {
+routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapService', function($scope, $rootScope, RoutemapService) {
 
 	angular.extend($scope, {
         fortaleza: {
@@ -37,7 +37,9 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', function($
     });
 
     $scope.createRoute = function(){
-
+		RoutemapService.createRoute($scope.markers, function(route){
+		      window.alert('Directions request failed due to ' + route);
+		});
     };
 
     $scope.resetRoute = function(){
@@ -67,5 +69,26 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', function($
     	}
     	return position;
     }
+
+}]);
+
+routemapApp.service('RoutemapService', ['$http', function($http) {
+
+	this.createRoute = function(points){
+		var responseRequest;
+  		var directionsService = new google.maps.DirectionsService;
+  		directionsService.route({
+			origin: {lat: 37.77, lng: -122.447},
+		    destination: {lat: 37.768, lng: -122.511}, 
+		    travelMode: google.maps.TravelMode['DRIVING']
+		}, function(response, status) {
+		    if (status == google.maps.DirectionsStatus.OK) {
+		      responseRequest = response;
+		    } else {
+		      window.alert('Directions request failed due to ' + status);
+		    }
+		});
+  		return responseRequest;
+	};
 
 }]);
