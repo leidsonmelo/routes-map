@@ -14,6 +14,7 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapS
                 apikey: 'pk.eyJ1IjoibGVpZHNvbm1lbG8iLCJhIjoiY2lwMnB1cXhwMDBnenRzbTB1ZXlkZ3R3dyJ9.jgUFPdP-vRqRVoe92p1RAQ'
             }
         },
+        routePath: {},
         markers: []
     });
 
@@ -37,13 +38,63 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapS
     });
 
     $scope.createRoute = function(){
-		RoutemapService.createRoute($scope.markers, function(route){
-		      window.alert('Directions request failed due to ' + route);
+		var directionsService = new google.maps.DirectionsService;
+		directionsService.route({
+		    origin: getOriginRoute($scope.markers),
+		    destination: getDestinationRoute($scope.markers),
+		    waypoints: getWaypointsRoute($scope.markers),
+		    travelMode: google.maps.TravelMode['DRIVING']
+		}, function(response, status) {
+		    if (status == google.maps.DirectionsStatus.OK) {
+		        $scope.routePath.p1 = {
+                    color: 'red',
+                    weight: 3,
+                    latlngs: getArrayPoints(response.routes[0].overview_path)
+                };
+		    } else {
+		      window.alert('Directions request failed due to ' + status);
+		    }
 		});
-    };
+	};
+
+	function getOriginRoute(markers){
+		return {lat: markers[0].lat, lng: markers[0].lng};
+	}
+
+	function getDestinationRoute(markers){
+		return {lat: markers[markers.length - 1].lat, lng: markers[markers.length - 1].lng};
+	}
+
+	function getWaypointsRoute(markers){
+		var waypoints = [];
+		if(markers && markers.length > 2){
+			for(x = 1; x < markers.length - 1; x ++){
+				waypoints.push({
+					location : {
+						lat: markers[x].lat,
+						lng: markers[x].lng,
+					}
+				});
+			}
+		}
+		return waypoints;
+	}
+
+    function getArrayPoints(overview_path){
+    	var arrayPoints = [];
+    	for(x = 0; x < overview_path.length; x++){
+	    	var icon = {
+	        	lat: overview_path[x].lat(),
+	            lng: overview_path[x].lng()
+	        };
+        	arrayPoints.push(icon);
+        }
+        return arrayPoints;
+    }
 
     $scope.resetRoute = function(){
 		$scope.markers = [];
+		$scope.routePath= {};
     };
 
     function generateIcon(event){
