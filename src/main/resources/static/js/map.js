@@ -38,24 +38,27 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapS
     });
 
     $scope.createRoute = function(){
-		var directionsService = new google.maps.DirectionsService;
-		directionsService.route({
+		new google.maps.DirectionsService().route({
 		    origin: getOriginRoute($scope.markers),
 		    destination: getDestinationRoute($scope.markers),
 		    waypoints: getWaypointsRoute($scope.markers),
-		    travelMode: google.maps.TravelMode['DRIVING']
+		    travelMode: google.maps.TravelMode.DRIVING
 		}, function(response, status) {
 		    if (status == google.maps.DirectionsStatus.OK) {
-		        $scope.routePath.p1 = {
-                    color: 'red',
-                    weight: 3,
-                    latlngs: getArrayPoints(response.routes[0].overview_path)
-                };
+                createRoutePath(response.routes[0].overview_path);
 		    } else {
 		      window.alert('Directions request failed due to ' + status);
 		    }
 		});
 	};
+
+    function createRoutePath(overview_path){
+        $scope.routePath.p1 = {
+            color: 'red',
+            weight: 3,
+            latlngs: getArrayPoints(overview_path)
+        };
+    }
 
 	function getOriginRoute(markers){
 		return {lat: markers[0].lat, lng: markers[0].lng};
@@ -130,7 +133,7 @@ routemapApp.service('RoutemapService', ['$http', function($http) {
   		var directionsService = new google.maps.DirectionsService;
   		directionsService.route({
 			origin: {lat: 37.77, lng: -122.447},
-		    destination: {lat: 37.768, lng: -122.511}, 
+		    destination: {lat: 37.768, lng: -122.511},
 		    travelMode: google.maps.TravelMode['DRIVING']
 		}, function(response, status) {
 		    if (status == google.maps.DirectionsStatus.OK) {

@@ -13,8 +13,56 @@ public class Route {
     private Date routeDate;
     private Integer vehicleId;
     private List<Stop> stops;
-    private List<Geocode> path;
+    private List<Position> path;
 
     public Route() {}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getRouteDate() {
+		return routeDate;
+	}
+
+	public void setRouteDate(Date routeDate) {
+		this.routeDate = routeDate;
+	}
+
+	public Integer getVehicleId() {
+		return vehicleId;
+	}
+
+	public void setVehicleId(Integer vehicleId) {
+		this.vehicleId = vehicleId;
+	}
+
+	public List<Stop> getStops() {
+		return stops;
+	}
+
+	public void setStops(List<Stop> stops) {
+		this.stops = stops;
+	}
+
+	public List<Position> getPath() {
+		return path;
+	}
+
+	public void setPath(List<Position> path) {
+		this.path = path;
+	}
 
 }

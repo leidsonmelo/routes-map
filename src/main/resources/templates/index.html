@@ -4,7 +4,7 @@
 	<head th:fragment="head">
 		<meta charset="UTF-8"></meta>
     	<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
-		
+
 		<link th:href="@{/webjars/bootstrap/3.3.1/css/bootstrap.min.css}" href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.css" rel="stylesheet" media="screen"></link>
 
 		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
@@ -31,12 +31,15 @@
 			</div>
 			<div class="alert alert-success" ng-show="markers.length > 0">
 				<strong>{{markers.length}}</strong> <i class="glyphicon glyphicon-map-marker"></i> ponto(s) selecionado(s).
+				<a class="btn btn-default button-alert" href="#" role="button" ng-click="saveRoute()" ng-show="routePath.p1">
+		  		<i class="glyphicon glyphicon-floppy-disk"></i>
+		  	</a>
 				<a class="btn btn-default button-alert" href="#" role="button" ng-click="createRoute()" ng-show="markers.length > 1">
-		  			<i class="glyphicon glyphicon-road"></i>
-		  		</a>
+		  		<i class="glyphicon glyphicon-road"></i>
+		  	</a>
 				<a class="btn btn-default button-alert" href="#" role="button" ng-click="resetRoute()" >
-		  			<i class="glyphicon glyphicon-repeat"></i>
-		  		</a>
+		  		<i class="glyphicon glyphicon-repeat"></i>
+		  	</a>
 			</div>
 		</div>
 
@@ -104,10 +107,9 @@
 			  </div><!-- /.modal-dialog -->
 			</div><!-- /.modal -->
 		</div>
-	 	
+
 	 	<!--<div id="mapid"></div>-->
     	<leaflet id="map" lf-center="fortaleza" markers="markers" paths="routePath" width="75%" height="600px"></leaflet>
-    	<div class="worldmap box">Map center: Teste</div>
 
 		<script th:src="@{/webjars/jquery/1.11.3/jquery.min.js}" src="http://cdn.jsdelivr.net/webjars/jquery/1.11.3/jquery.min.js"></script>
 
@@ -125,6 +127,6 @@
 		<script src="js/app.js"></script>
 		<script src="js/vehicle.js"></script>
 		<script src="js/map.js"></script>
-			
+
 	</body>
 </html>
