@@ -2,22 +2,25 @@ package com.routesmap.app.controller.api;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.maps.GeocodingApi;
 import com.routesmap.app.model.entity.Route;
 import com.routesmap.app.model.entity.Stop;
-import com.routesmap.app.util.GeoApiRoute;
+import com.routesmap.app.service.RouteService;
 
 @RestController
 @RequestMapping(value = "/route")
 public class RouteController {
 
-	public Route generateRoute(List<Stop> stops){
-//		GeocodingApi.newRequest(GeoApiRoute.getContext()).
-//		GeoApiRoute.getContext().new
-		return null;
+	@Autowired private RouteService routeService;
+	
+	@RequestMapping(value = "/generate-route", method=RequestMethod.POST)
+	public Route generateRoute(@RequestBody List<Stop> stops){
+		return routeService.generateRoute(stops);
 	}
 	
 }

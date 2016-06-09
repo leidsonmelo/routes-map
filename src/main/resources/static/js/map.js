@@ -38,25 +38,27 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapS
     });
 
     $scope.createRoute = function(){
-		new google.maps.DirectionsService().route({
-		    origin: getOriginRoute($scope.markers),
-		    destination: getDestinationRoute($scope.markers),
-		    waypoints: getWaypointsRoute($scope.markers),
-		    travelMode: google.maps.TravelMode.DRIVING
-		}, function(response, status) {
-		    if (status == google.maps.DirectionsStatus.OK) {
-                createRoutePath(response.routes[0].overview_path);
-		    } else {
-		      window.alert('Directions request failed due to ' + status);
-		    }
+		var stops = createStops($scope.markers);
+		RoutemapService.createRoute(stops).then(function(route){
+			createRoutePath(route.path);
 		});
 	};
+
+	function createStops(markers){
+		var stops = [];
+		for(x = 0; x < markers.length; x++){
+			stops.push({
+				position : markers[x]
+			});
+		}
+		return stops;
+	}
 
     function createRoutePath(overview_path){
         $scope.routePath.p1 = {
             color: 'red',
             weight: 3,
-            latlngs: getArrayPoints(overview_path)
+            latlngs: overview_path
         };
     }
 
@@ -82,18 +84,6 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapS
 		}
 		return waypoints;
 	}
-
-    function getArrayPoints(overview_path){
-    	var arrayPoints = [];
-    	for(x = 0; x < overview_path.length; x++){
-	    	var icon = {
-	        	lat: overview_path[x].lat(),
-	            lng: overview_path[x].lng()
-	        };
-        	arrayPoints.push(icon);
-        }
-        return arrayPoints;
-    }
 
     $scope.resetRoute = function(){
 		$scope.markers = [];
@@ -129,20 +119,11 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapS
 routemapApp.service('RoutemapService', ['$http', function($http) {
 
 	this.createRoute = function(points){
-		var responseRequest;
-  		var directionsService = new google.maps.DirectionsService;
-  		directionsService.route({
-			origin: {lat: 37.77, lng: -122.447},
-		    destination: {lat: 37.768, lng: -122.511},
-		    travelMode: google.maps.TravelMode['DRIVING']
-		}, function(response, status) {
-		    if (status == google.maps.DirectionsStatus.OK) {
-		      responseRequest = response;
-		    } else {
-		      window.alert('Directions request failed due to ' + status);
-		    }
-		});
-  		return responseRequest;
+  		return $http.post('/route/generate-route', points).then(function(response){
+	     	return response.data;
+	    }, function(error){
+	      	return $q.reject(error);
+	    });
 	};
 
 }]);

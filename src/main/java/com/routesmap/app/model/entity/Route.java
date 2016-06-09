@@ -15,7 +15,17 @@ public class Route {
     private List<Stop> stops;
     private List<Position> path;
 
-    public Route() {}
+    public Route() {
+    	
+    }
+    
+    public Route(String name, Date routeDate, Integer vehicleId, List<Stop> stops, List<Position> path){
+    	this.name = name;
+    	this.routeDate = routeDate;
+    	this.vehicleId = vehicleId;
+    	this.stops = stops;
+    	this.path = path;
+    }
 
 	public String getId() {
 		return id;

@@ -1,6 +1,7 @@
 package com.routesmap.app.util;
 
-import com.google.maps.GaeRequestHandler;
+import com.google.maps.DirectionsApi;
+import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 
 public class GeoApiRoute {
@@ -11,9 +12,12 @@ public class GeoApiRoute {
 	
 	public static GeoApiContext getContext(){
 		if(context == null)
-			new GeoApiContext(new GaeRequestHandler()).setApiKey(API_KEY);
+			context = new GeoApiContext().setApiKey(API_KEY);
 		return context;
 	}
 	
+	public static DirectionsApiRequest newRequest(){
+		return DirectionsApi.newRequest(getContext());
+	}
 	
 }
