@@ -11,7 +11,7 @@ public class Route {
 
     private String name;
     private Date routeDate;
-    private Integer vehicleId;
+    private String vehicleId;
     private List<Stop> stops;
     private List<Position> path;
 
@@ -19,7 +19,13 @@ public class Route {
     	
     }
     
-    public Route(String name, Date routeDate, Integer vehicleId, List<Stop> stops, List<Position> path){
+    public Route(Date routeDate, List<Stop> stops, List<Position> path){
+    	this.routeDate = routeDate;
+    	this.stops = stops;
+    	this.path = path;
+    }
+    
+    public Route(String name, Date routeDate, String vehicleId, List<Stop> stops, List<Position> path){
     	this.name = name;
     	this.routeDate = routeDate;
     	this.vehicleId = vehicleId;
@@ -51,11 +57,11 @@ public class Route {
 		this.routeDate = routeDate;
 	}
 
-	public Integer getVehicleId() {
+	public String getVehicleId() {
 		return vehicleId;
 	}
 
-	public void setVehicleId(Integer vehicleId) {
+	public void setVehicleId(String vehicleId) {
 		this.vehicleId = vehicleId;
 	}
 

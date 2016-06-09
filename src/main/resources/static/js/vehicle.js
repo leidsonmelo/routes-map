@@ -37,7 +37,7 @@ routemapApp.controller('VehicleController', ['$scope', '$rootScope', 'VehicleSer
 
 }]);
 
-routemapApp.service('VehicleService', ['$http', function($http) {
+routemapApp.service('VehicleService', ['$http', '$q', function($http, $q) {
 
 	this.listAll = function(){
 		return $http.get('/vehicle/listall').then(function(response){

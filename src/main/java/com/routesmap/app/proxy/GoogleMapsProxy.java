@@ -26,7 +26,7 @@ public class GoogleMapsProxy {
 			DirectionsRoute directionsRoute = result.routes[0];
 			
 			List<Position> path = fromLatLng(directionsRoute.overviewPolyline.decodePath());
-			return new Route("Rota 01", new Date(), 1, stops, path);
+			return new Route(new Date(), stops, path);
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}

@@ -27,11 +27,13 @@
 		</div>
 		<div id="content" ng-show="selectedVehicle.id">
 			<div class="alert alert-success" ng-show="markers.length === 0">
-				O veículo <strong>{{selectedVehicle.name}}</strong> está selecionado. Você já pode montar a rota.
+				O veículo <strong>{{selectedVehicle.name}}</strong> está selecionado. 
+				<span ng-show="!route.name">Você já pode montar a rota.</span>
+				<span ng-show="route.name">Você já pode modificar a rota <strong>{{route.name}}</strong>.</span>
 			</div>
 			<div class="alert alert-success" ng-show="markers.length > 0">
 				<strong>{{markers.length}}</strong> <i class="glyphicon glyphicon-map-marker"></i> ponto(s) selecionado(s).
-				<a class="btn btn-default button-alert" href="#" role="button" ng-click="saveRoute()" ng-show="routePath.p1">
+				<a class="btn btn-default button-alert" href="#" role="button" ng-click="openModalSaveRoute()" ng-show="routePath.p1">
 		  		<i class="glyphicon glyphicon-floppy-disk"></i>
 		  	</a>
 				<a class="btn btn-default button-alert" href="#" role="button" ng-click="createRoute()" ng-show="markers.length > 1">
@@ -102,6 +104,29 @@
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 			        <button type="button" class="btn btn-success" ng-click="save(vehicle)">Salvar</button>
+			      </div>
+			    </div><!-- /.modal-content -->
+			  </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+
+			<div class="modal fade" tabindex="-1" role="dialog" id="modalSaveRoute">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">Adicionar Rota</h4>
+			      </div>
+			      <div class="modal-body">
+					<form>
+					  <div class="form-group">
+					    <label for="route.name">Nome</label>
+					    <input type="text" class="form-control" name="route.name" ng-model="route.name" placeholder="Nome da Rota"></input>
+					  </div>
+					</form>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+			        <button type="button" class="btn btn-success" ng-click="saveRoute(route)">Salvar</button>
 			      </div>
 			    </div><!-- /.modal-content -->
 			  </div><!-- /.modal-dialog -->

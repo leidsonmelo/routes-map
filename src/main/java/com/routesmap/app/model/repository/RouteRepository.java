@@ -6,4 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface RouteRepository extends MongoRepository<Route, String> {
 
+	public Route findByVehicleId(String vehicleId);
+	
 }

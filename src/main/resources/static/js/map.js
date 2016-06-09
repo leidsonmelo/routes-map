@@ -1,6 +1,8 @@
 
 routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapService', function($scope, $rootScope, RoutemapService) {
 
+	$scope.route = {};
+
 	angular.extend($scope, {
         fortaleza: {
             lat: -3.75,
@@ -22,6 +24,11 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapS
     	if(!newVehicle || newVehicle.id !== oldVehicle.id){
 			$scope.resetRoute();
     	}
+    	if(newVehicle && newVehicle.id){
+    		RoutemapService.loadRoute(newVehicle).then(function(route){
+    			loadRoute(route);
+    		});
+    	}
     });
 
     $scope.$on('leafletDirectiveMap.map.click', function(event, args){
@@ -40,9 +47,34 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapS
     $scope.createRoute = function(){
 		var stops = createStops($scope.markers);
 		RoutemapService.createRoute(stops).then(function(route){
+			if($scope.route && $scope.route.id){
+				route.id = $scope.route.id;
+				route.name = $scope.route.name;
+			}
+			$scope.route = route;
 			createRoutePath(route.path);
 		});
 	};
+
+	$scope.openModalSaveRoute = function(){
+		$('#modalSaveRoute').modal('show');
+	};
+
+	$scope.saveRoute = function(route){
+		$scope.route.name = route.name;
+		$scope.route.vehicleId = $rootScope.selectedVehicle.id;
+
+		RoutemapService.save(route).then(function(){
+			$rootScope.selectedVehicle = {};
+			$('#modalSaveRoute').modal('hide');
+		});
+	};
+	
+	function loadRoute(route){
+		$scope.route = route;
+		createMakers(route.stops);
+		createRoutePath(route.path);
+	}
 
 	function createStops(markers){
 		var stops = [];
@@ -52,6 +84,14 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapS
 			});
 		}
 		return stops;
+	}
+
+	function createMakers(stops){
+		if(stops){
+			for(x = 0; x < stops.length; x++){
+		        $scope.markers.push(stops[x].position);
+			}
+		}
 	}
 
     function createRoutePath(overview_path){
@@ -86,6 +126,7 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapS
 	}
 
     $scope.resetRoute = function(){
+    	$scope.route = {};
 		$scope.markers = [];
 		$scope.routePath= {};
     };
@@ -116,7 +157,7 @@ routemapApp.controller('RoutemapController', ['$scope', '$rootScope', 'RoutemapS
 
 }]);
 
-routemapApp.service('RoutemapService', ['$http', function($http) {
+routemapApp.service('RoutemapService', ['$http', '$q', function($http, $q) {
 
 	this.createRoute = function(points){
   		return $http.post('/route/generate-route', points).then(function(response){
@@ -124,6 +165,20 @@ routemapApp.service('RoutemapService', ['$http', function($http) {
 	    }, function(error){
 	      	return $q.reject(error);
 	    });
+	};
+
+	this.save = function(route){
+	    return $http.post('/route/save', route).then(function(response){
+	     	return response.data;
+	    }, function(error){
+	      	return $q.reject(error);
+	    });
+  	};
+
+  	this.loadRoute = function(vehicle){
+		return $http.get('/route/load/' + vehicle.id).then(function(response){
+			return response.data;
+		});
 	};
 
 }]);
